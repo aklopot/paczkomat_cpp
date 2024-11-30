@@ -1,130 +1,130 @@
 #include "paczkomat.h"
 
-// Implementacja klasy Skrzynka
+// Implementacja klasy Box
 
-Skrzynka::Skrzynka(float wys, float szer, Rozmiar roz)
-	: wysokosc(wys), szerokosc(szer), zajeta(false), kod(0), rozmiar(roz) {}
+Box::Box(float height, float width, Size size)
+    : height_(height), width_(width), occupied_(false), code_(0), size_(size) {}
 
-// Funkcja prywatne klasy Skrzynka
+// Funkcja prywatne klasy Box
 
-string Skrzynka::pobierz_rozmiar() const {
-    switch (rozmiar) {
-        case Rozmiar::MALA: return "Mala";
-        case Rozmiar::SREDNIA: return "Srednia";
-        case Rozmiar::DUZA: return "Duza";
+string Box::GetSize() const {
+    switch (size_) {
+        case Size::SMALL: return "Mala";
+        case Size::MEDIUM: return "Srednia";
+        case Size::LARGE: return "Duza";
         default: return "Nieznany";
     }
 }
 
-int Skrzynka::generuj_kod() {
+int Box::GenerateCode() {
     return rand() % 900000 + 100000;
 }
 
-// Funkcje publiczne dlasy Skrzynka
+// Funkcje publiczne klasy Box
 
-bool Skrzynka::wloz_paczke(float wys, float szer) {
-    if (zajeta) {
+bool Box::InsertPackage(float height, float width) {
+    if (occupied_) {
         cout << endl << "Skrzynka jest juz zajeta!" << endl;
         return false;
     }
-    if (wys <= wysokosc && szer <= szerokosc) {
-        zajeta = true;
-        kod = generuj_kod();
-        cout << endl << "Do skrzynki o rozmiarze " << pobierz_rozmiar() << " [" << wysokosc << "x" << szerokosc << "] pomyslenie wlozono paczke o rozmiarze: " << wys << "x" << szer << endl;
-        cout << "Kod do otwarcia: " << kod << endl;
+    if (height <= height_ && width <= width_) {
+        occupied_ = true;
+        code_ = GenerateCode();
+        cout << endl << "Do skrzynki o rozmiarze " << GetSize() << " [" << height_ << "x" << width_ << "] pomyslenie wlozono paczke o rozmiarze: " << height << "x" << width << endl;
+        cout << "Kod do otwarcia: " << code_ << endl;
         return true;
     } else {
-        cout << endl << "W skrzynce o rozmarze " << pobierz_rozmiar() << " [" << wysokosc << "x" << szerokosc << "] nie miesci sie paczka o rozmarze " << wys << "x" << szer << "!" << endl;
+        cout << endl << "W skrzynce o rozmarze " << GetSize() << " [" << height_ << "x" << width_ << "] nie miesci sie paczka o rozmarze " << height << "x" << width << "!" << endl;
         return false;
     }
 }
 
-bool Skrzynka::czy_zajeta() const {
-    return zajeta;
+bool Box::IsOccupied() const {
+    return occupied_;
 }
 
-bool Skrzynka::sprawdz_kod(int wpisany_kod) {
-    return kod == wpisany_kod;
+bool Box::CheckCode(int enteredCode) {
+    return code_ == enteredCode;
 }
 
-void Skrzynka::wyjmij_paczke() {
-    if (zajeta) {
-        zajeta = false;
-        kod = 0;
-        cout << "Paczka pomyslnie wyjeta ze skrzynki o rozmiarze " << pobierz_rozmiar() << endl;
+void Box::RemovePackage() {
+    if (occupied_) {
+        occupied_ = false;
+        code_ = 0;
+        cout << "Paczka pomyslnie wyjeta ze skrzynki o rozmiarze " << GetSize() << endl;
     } else {
         cout << "Skrzynka jest pusta!" << endl;
     }
 }
 
-int Skrzynka::pobierz_kod() const {
-    if (zajeta) {
-        return kod;
+int Box::GetCode() const {
+    if (occupied_) {
+        return code_;
     } else {
         // Kod -1 oznacza, że skrzynka jest pusta
         return -1;
     }
 }
 
-void Skrzynka::wyswietl_stan_skrzynki() const {
-    cout << "Rozmiar: " << pobierz_rozmiar() << ", Wysokosc: " << wysokosc << ", Szerokosc: " << szerokosc
-         << ", Zajeta: " << (zajeta ? "TAK" : "NIE") << endl;
+void Box::DisplayBoxStatus() const {
+    cout << "Rozmiar: " << GetSize() << ", Wysokosc: " << height_ << ", Szerokosc: " << width_
+         << ", Zajeta: " << (occupied_ ? "TAK" : "NIE") << endl;
 }
 
-// Implementacja klasy Paczkomat
+// Implementacja klasy ParcelLocker
 
-Paczkomat::Paczkomat(int ile_malych, int ile_srednich, int ile_duzych) {
-	for (int i = 0; i < ile_malych; ++i) {
-		skrzynki.push_back(make_unique<Skrzynka>(10, 10, Skrzynka::Rozmiar::MALA));
-	}
-	for (int i = 0; i < ile_srednich; ++i) {
-		skrzynki.push_back(make_unique<Skrzynka>(20, 20, Skrzynka::Rozmiar::SREDNIA));
-	}
-	for (int i = 0; i < ile_duzych; ++i) {
-		skrzynki.push_back(make_unique<Skrzynka>(30, 30, Skrzynka::Rozmiar::DUZA));
-	}
+ParcelLocker::ParcelLocker(int numSmall, int numMedium, int numLarge) {
+    for (int i = 0; i < numSmall; ++i) {
+        boxes_.push_back(make_unique<Box>(10, 10, Box::Size::SMALL));
+    }
+    for (int i = 0; i < numMedium; ++i) {
+        boxes_.push_back(make_unique<Box>(20, 20, Box::Size::MEDIUM));
+    }
+    for (int i = 0; i < numLarge; ++i) {
+        boxes_.push_back(make_unique<Box>(30, 30, Box::Size::LARGE));
+    }
 }
 
-// Funkcje publiczne klasy Paczkomat
+// Funkcje publiczne klasy ParcelLocker
 
-void Paczkomat::wloz_paczke(int ID_skrzynki, float wys, float szer) {
-    if (ID_skrzynki <= 0 || ID_skrzynki > (int)skrzynki.size()) {
+void ParcelLocker::InsertPackage(int boxId, float height, float width) {
+    if (boxId <= 0 || boxId > (int)boxes_.size()) {
         cout << "Niepoprawny numer skrzynki!" << endl;
         return;
     }
-    ID_skrzynki--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
-    skrzynki[ID_skrzynki]->wloz_paczke(wys, szer);
+    boxId--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
+    boxes_[boxId]->InsertPackage(height, width);
 }
 
-void Paczkomat::wyjmij_paczke(int ID_skrzynki, int kod) {
-    if (ID_skrzynki <= 0 || ID_skrzynki > (int)skrzynki.size()) {
+void ParcelLocker::RemovePackage(int boxId, int code) {
+    if (boxId <= 0 || boxId > (int)boxes_.size()) {
         cout << "Niepoprawny numer skrzynki!" << endl;
         return;
     }
-    ID_skrzynki--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
-    if (skrzynki[ID_skrzynki]->czy_zajeta() && skrzynki[ID_skrzynki]->sprawdz_kod(kod)) {
-        skrzynki[ID_skrzynki]->wyjmij_paczke();
+    boxId--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
+    if (boxes_[boxId]->IsOccupied() && boxes_[boxId]->CheckCode(code)) {
+        boxes_[boxId]->RemovePackage();
     } else {
         cout << "Niepoprawny kod lub skrzynka jest pusta!" << endl;
     }
 }
 
-void Paczkomat::wyswietl_stan_paczkomatu() const {
-    for (size_t i = 0; i < skrzynki.size(); ++i) {
+void ParcelLocker::DisplayLockerStatus() const {
+    for (size_t i = 0; i < boxes_.size(); ++i) {
         cout << "Skrzynka " << i+1 << ": ";
-        skrzynki[i]->wyswietl_stan_skrzynki();
+        boxes_[i]->DisplayBoxStatus();
     }
 }
 
-void Paczkomat::pobierz_kod(int ID_skrzynki) const {
-    if (ID_skrzynki <= 0 || ID_skrzynki > (int)skrzynki.size()) {
+void ParcelLocker::GetCode(int boxId) const {
+    if (boxId <= 0 || boxId > (int)boxes_.size()) {
         cout << "Niepoprawny numer skrzynki!" << endl;
         return;
     }
-    ID_skrzynki--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
-    if (skrzynki[ID_skrzynki]->czy_zajeta()) {
+    boxId--; // Odejmuje do 1 od numeru skrzynki na potrzeby numeracji vectora
+    if (boxes_[boxId]->IsOccupied()) {
         cout << "Wysylam kod e-mailem/SMSem :)" << endl;
-        cout << "Kod do skrzynki " << ID_skrzynki+1 << ": " << skrzynki[ID_skrzynki]->pobierz_kod() << endl;
+        cout << "Kod do skrzynki " << boxId+1 << ": " << boxes_[boxId]->GetCode() << endl;
     } else {
         cout << "Skrzynka jest pusta!" << endl;
     }

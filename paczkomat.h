@@ -4,38 +4,38 @@
 
 using namespace std;
 
-class Skrzynka {
+class Box {
   public:
-	enum class Rozmiar { MALA, SREDNIA, DUZA };
+    enum class Size { SMALL, MEDIUM, LARGE };
 
   private:
-	float wysokosc;
-	float szerokosc;
-	bool zajeta;
-	int kod;
-	Rozmiar rozmiar;
-	string pobierz_rozmiar() const;
-	int generuj_kod();
-	
+    float height_;
+    float width_;
+    bool occupied_;
+    int code_;
+    Size size_;
+    string GetSize() const;
+    int GenerateCode();
+    
 
   public:
-	Skrzynka(float wys, float szer, Rozmiar roz);
-	bool wloz_paczke(float wys, float szer);
-	bool czy_zajeta() const;
-	bool sprawdz_kod(int wpisany_kod);
-	void wyjmij_paczke();
-	int pobierz_kod() const;
-	void wyswietl_stan_skrzynki() const;
+    Box(float height, float width, Size size);
+    bool InsertPackage(float height, float width);
+    bool IsOccupied() const;
+    bool CheckCode(int enteredCode);
+    void RemovePackage();
+    int GetCode() const;
+    void DisplayBoxStatus() const;
 };
 
-class Paczkomat {
+class ParcelLocker {
   private:
-	vector<unique_ptr<Skrzynka>> skrzynki;
+    vector<unique_ptr<Box>> boxes_;
 
   public:
-	Paczkomat(int ile_malych, int ile_srednich, int ile_duzych);
-	void wloz_paczke(int ID_skrzynki, float wys, float szer);
-	void wyjmij_paczke(int ID_skrzynki, int kod);
-	void wyswietl_stan_paczkomatu() const;
-	void pobierz_kod(int ID_skrzynki) const;
+    ParcelLocker(int numSmall, int numMedium, int numLarge);
+    void InsertPackage(int boxId, float height, float width);
+    void RemovePackage(int boxId, int code);
+    void DisplayLockerStatus() const;
+    void GetCode(int boxId) const;
 };
