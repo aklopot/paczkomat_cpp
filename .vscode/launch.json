@@ -25,7 +25,7 @@
                 }
             ],
             "preLaunchTask": "Build C++ Project",
-            "miDebuggerPath": "C:/Program Files/MinGW/bin/gdb.exe"
+            "miDebuggerPath": "gdb"
         },
         {
             "name": "Run&Debug C++ Project (VSCode-Internal Terminal)",
@@ -51,7 +51,7 @@
                 }
             ],
             "preLaunchTask": "Build C++ Project",
-            "miDebuggerPath": "C:/Program Files/MinGW/bin/gdb.exe"
+            "miDebuggerPath": "gdb"
         }
     ]
 }

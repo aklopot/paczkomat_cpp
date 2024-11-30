@@ -11,10 +11,10 @@
                 "${file}",
                 "${workspaceFolder}/paczkomat.cpp",
                 "-o",
-                "${fileDirname}/output/${fileBasenameNoExtension}"
+                "${workspaceFolder}/output/${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"

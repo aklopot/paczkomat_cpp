@@ -9,9 +9,9 @@ Skrzynka::Skrzynka(float wys, float szer, Rozmiar roz)
 
 string Skrzynka::pobierz_rozmiar() const {
     switch (rozmiar) {
-        case MALA: return "Mala";
-        case SREDNIA: return "Srednia";
-        case DUZA: return "Duza";
+        case Rozmiar::MALA: return "Mala";
+        case Rozmiar::SREDNIA: return "Srednia";
+        case Rozmiar::DUZA: return "Duza";
         default: return "Nieznany";
     }
 }
@@ -75,20 +75,14 @@ void Skrzynka::wyswietl_stan_skrzynki() const {
 
 Paczkomat::Paczkomat(int ile_malych, int ile_srednich, int ile_duzych) {
 	for (int i = 0; i < ile_malych; ++i) {
-		skrzynki.push_back(new Skrzynka(10, 10, Skrzynka::MALA));
+		skrzynki.push_back(make_unique<Skrzynka>(10, 10, Skrzynka::Rozmiar::MALA));
 	}
 	for (int i = 0; i < ile_srednich; ++i) {
-		skrzynki.push_back(new Skrzynka(20, 20, Skrzynka::SREDNIA));
+		skrzynki.push_back(make_unique<Skrzynka>(20, 20, Skrzynka::Rozmiar::SREDNIA));
 	}
 	for (int i = 0; i < ile_duzych; ++i) {
-		skrzynki.push_back(new Skrzynka(30, 30, Skrzynka::DUZA));
+		skrzynki.push_back(make_unique<Skrzynka>(30, 30, Skrzynka::Rozmiar::DUZA));
 	}
-}
-
-Paczkomat::~Paczkomat() {
-    for (size_t i = 0; i < skrzynki.size(); i++) {
-        delete skrzynki[i];
-    }
 }
 
 // Funkcje publiczne klasy Paczkomat

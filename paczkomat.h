@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
 class Skrzynka {
   public:
-	enum Rozmiar { MALA, SREDNIA, DUZA };
+	enum class Rozmiar { MALA, SREDNIA, DUZA };
 
   private:
 	float wysokosc;
@@ -29,11 +30,10 @@ class Skrzynka {
 
 class Paczkomat {
   private:
-	vector<Skrzynka *> skrzynki;
+	vector<unique_ptr<Skrzynka>> skrzynki;
 
   public:
 	Paczkomat(int ile_malych, int ile_srednich, int ile_duzych);
-	~Paczkomat();
 	void wloz_paczke(int ID_skrzynki, float wys, float szer);
 	void wyjmij_paczke(int ID_skrzynki, int kod);
 	void wyswietl_stan_paczkomatu() const;

@@ -1,6 +1,7 @@
 #include "paczkomat.h"
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ int main() {
 	char wyborMenu, wyborTakNie;
 	bool koniecProgramu = false;
 	bool paczkomat_utworzony = false;
-	Paczkomat *paczkomat = nullptr;
+	unique_ptr<Paczkomat> paczkomat;
 	do {
 		cout << endl << "\t#################################" << endl;
 		cout << "\tCo chcesz wykonac? Wybierz opcje:" << endl;
@@ -39,7 +40,7 @@ int main() {
 				cin >> ile_srednich;
 				cout << "Podaj liczbe duzych skrzynek: ";
 				cin >> ile_duzych;
-				paczkomat = new Paczkomat(ile_malych, ile_srednich, ile_duzych);
+				paczkomat = make_unique<Paczkomat>(ile_malych, ile_srednich, ile_duzych);
 				paczkomat_utworzony = true;
 				cout << "Paczkomat zostal utworzony." << endl;
 			}
@@ -49,8 +50,7 @@ int main() {
 				cout << "\tCzy na pewno chcesz zniszczyc Paczkomat? [T/N]: ";
 				cin >> wyborTakNie;
 				if (wyborTakNie == 'T' || wyborTakNie == 't') {
-					delete paczkomat;
-					paczkomat = nullptr;
+					paczkomat.reset();
 					paczkomat_utworzony = false;
 					cout << "Paczkomat zostal zniszczony." << endl;
 				}
@@ -109,7 +109,7 @@ int main() {
             else {
                 cout << "Wersja DEMO paczkomatu!" << endl;
                 cout << "Tworze paczkomat o ilosci skrzynek: 5-MALE, 4-SREDNIE, 3-DUZE" << endl;
-                paczkomat = new Paczkomat(5, 4, 3);
+                paczkomat = make_unique<Paczkomat>(5, 4, 3);
                 paczkomat_utworzony = true;
                 cout << endl << "Dodaje paczke do skrzynki 2 (paczka 8x4 - paczka OK):";
                 paczkomat->wloz_paczke(2,8,4);
@@ -134,7 +134,7 @@ int main() {
 				cout << "\tDziekuje za korzystanie z programu do obslugi Paczkomatu!" << endl;
 				koniecProgramu = true;
 				if (paczkomat_utworzony) {
-					delete paczkomat; // Zwolnienie pamieci
+					paczkomat.reset();
 				}
 			}
 			break;
