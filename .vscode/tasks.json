@@ -8,8 +8,12 @@
                 "-fdiagnostics-color=always",
                 "-g3",
                 "-std=c++23",
+                "-fno-rtti",
                 "${file}",
-                "${workspaceFolder}/paczkomat.cpp",
+                "${workspaceFolder}/package.cpp",
+                "${workspaceFolder}/locker.cpp",
+                "${workspaceFolder}/code_manager.cpp",
+                "${workspaceFolder}/parcel_locker.cpp",
                 "-o",
                 "${workspaceFolder}/output/${fileBasenameNoExtension}"
             ],
