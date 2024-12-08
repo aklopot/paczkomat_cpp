@@ -56,7 +56,7 @@ char getMenuChoice() {
     return choice;
 }
 
-int main() {
+void runParcelLockerProgram() {
     cout << "Program do obslugi Paczkomatu." << endl;
     char menuChoice, confirmChoice;
     bool endProgram = false;
@@ -178,5 +178,9 @@ int main() {
 
     cout << endl; 
     system("pause"); 
+}
+
+int main() {
+    runParcelLockerProgram();
     return 0;
 }
