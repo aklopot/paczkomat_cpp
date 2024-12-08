@@ -3,21 +3,19 @@
 #include <iostream>
 #include <memory>
 
-using namespace std;
-
 template<typename Func>
-void executeIfParcelLockerExists(const unique_ptr<ParcelLocker>& parcelLocker, Func&& action) {
+void executeIfParcelLockerExists(const std::unique_ptr<ParcelLocker>& parcelLocker, Func&& action) {
     if (!parcelLocker) {
-        cout << "Paczkomat nie zostal jeszcze utworzony! Wybierz opcje 1, aby utworzyc paczkomat." << endl;
+        std::cout << "Paczkomat nie zostal jeszcze utworzony! Wybierz opcje 1, aby utworzyc paczkomat." << std::endl;
         return;
     }
     std::forward<Func>(action)();
 }
 
 template<typename Func>
-void executeIfParcelLockerNotExists(const unique_ptr<ParcelLocker>& parcelLocker, const string& message, Func&& action) {
+void executeIfParcelLockerNotExists(const std::unique_ptr<ParcelLocker>& parcelLocker, const std::string& message, Func&& action) {
     if (parcelLocker) {
-        cout << endl << message << endl;
+        std::cout << std::endl << message << std::endl;
         return;
     }
     std::forward<Func>(action)();
@@ -28,27 +26,27 @@ char getMenuChoice() {
     bool validChoice;
     
     do {
-        cout << endl << "\t#################################" << endl;
-        cout << "\tCo chcesz wykonac? Wybierz opcje:" << endl;
-        cout << "\t\t1 - STWORZ paczkomat" << endl;
-        cout << "\t\t2 - ZNISZCZ paczkomat" << endl;
-        cout << "\t\t3 - WYSWIETL stan paczkomatu" << endl;
-        cout << "\t\t4 - WLOZ paczke" << endl;
-        cout << "\t\t5 - WYJMIJ paczke" << endl;
-        cout << "\t\t6 - WYSLIJ kod do skrzynki e-meilem/SMSem :)" << endl;
-        cout << "\t\t9 - DEMO programu paczkomat" << endl;
-        cout << "\t\t0 - WYJSCIE z programu" << endl;
-        cout << "\t#################################" << endl;
-        cout << "\tWybierz opcje [1, 2, 3, 4, 5, 6, 9 lub 0]: ";
+        std::cout << std::endl << "\t#################################" << std::endl;
+        std::cout << "\tCo chcesz wykonac? Wybierz opcje:" << std::endl;
+        std::cout << "\t\t1 - STWORZ paczkomat" << std::endl;
+        std::cout << "\t\t2 - ZNISZCZ paczkomat" << std::endl;
+        std::cout << "\t\t3 - WYSWIETL stan paczkomatu" << std::endl;
+        std::cout << "\t\t4 - WLOZ paczke" << std::endl;
+        std::cout << "\t\t5 - WYJMIJ paczke" << std::endl;
+        std::cout << "\t\t6 - WYSLIJ kod do skrzynki e-meilem/SMSem :)" << std::endl;
+        std::cout << "\t\t9 - DEMO programu paczkomat" << std::endl;
+        std::cout << "\t\t0 - WYJSCIE z programu" << std::endl;
+        std::cout << "\t#################################" << std::endl;
+        std::cout << "\tWybierz opcje [1, 2, 3, 4, 5, 6, 9 lub 0]: ";
         
-        cin >> choice;
+        std::cin >> choice;
         validChoice = (choice == '0' || choice == '1' || choice == '2' || 
                       choice == '3' || choice == '4' || choice == '5' || 
                       choice == '6' || choice == '9');
                       
         if (!validChoice) {
             system("cls");
-            cout << endl << "\tNiepoprawna opcja. Mozesz wybrac tylko [1, 2, 3, 4, 5, 6, 9 lub 0]" << endl;
+            std::cout << std::endl << "\tNiepoprawna opcja. Mozesz wybrac tylko [1, 2, 3, 4, 5, 6, 9 lub 0]" << std::endl;
         }
     } while (!validChoice);
     
@@ -57,10 +55,10 @@ char getMenuChoice() {
 }
 
 void runParcelLockerProgram() {
-    cout << "Program do obslugi Paczkomatu." << endl;
+    std::cout << "Program do obslugi Paczkomatu." << std::endl;
     char menuChoice, confirmChoice;
     bool endProgram = false;
-    unique_ptr<ParcelLocker> parcelLocker;
+    std::unique_ptr<ParcelLocker> parcelLocker;
 
     do {
         menuChoice = getMenuChoice();
@@ -70,25 +68,25 @@ void runParcelLockerProgram() {
                 executeIfParcelLockerNotExists(parcelLocker, 
                     "Paczkomat juz zostal utworzony!",
                     [&]() {
-                        cout << endl << "Tworze nowy paczkomat!" << endl;
+                        std::cout << std::endl << "Tworze nowy paczkomat!" << std::endl;
                         int numSmall, numMedium, numLarge;
-                        cout << "Podaj liczbe malych skrzynek: ";
-                        cin >> numSmall;
-                        cout << "Podaj liczbe srednich skrzynek: ";
-                        cin >> numMedium;
-                        cout << "Podaj liczbe duzych skrzynek: ";
-                        cin >> numLarge;
-                        parcelLocker = make_unique<ParcelLocker>(numSmall, numMedium, numLarge);
-                        cout << "Paczkomat zostal utworzony." << endl;
+                        std::cout << "Podaj liczbe malych skrzynek: ";
+                        std::cin >> numSmall;
+                        std::cout << "Podaj liczbe srednich skrzynek: ";
+                        std::cin >> numMedium;
+                        std::cout << "Podaj liczbe duzych skrzynek: ";
+                        std::cin >> numLarge;
+                        parcelLocker = std::make_unique<ParcelLocker>(numSmall, numMedium, numLarge);
+                        std::cout << "Paczkomat zostal utworzony." << std::endl;
                     });
                 break;
             case '2': // 2 - ZNISZCZ paczkomat
                 executeIfParcelLockerExists(parcelLocker, [&]() {
-                    cout << "\tCzy na pewno chcesz zniszczyc Paczkomat? [T/N]: ";
-                    cin >> confirmChoice;
+                    std::cout << "\tCzy na pewno chcesz zniszczyc Paczkomat? [T/N]: ";
+                    std::cin >> confirmChoice;
                     if (confirmChoice == 'T' || confirmChoice == 't') {
                         parcelLocker.reset();
-                        cout << "Paczkomat zostal zniszczony." << endl;
+                        std::cout << "Paczkomat zostal zniszczony." << std::endl;
                     }
                 });
                 break;
@@ -101,14 +99,14 @@ void runParcelLockerProgram() {
                 executeIfParcelLockerExists(parcelLocker, [&]() {
                     int boxId;
                     float height, width, length;
-                    cout << "Podaj ID skrzynki: ";
-                    cin >> boxId;
-                    cout << "Podaj wysokosc paczki: ";
-                    cin >> height;
-                    cout << "Podaj szerokosc paczki: ";
-                    cin >> width;
-                    cout << "Podaj dlugosc paczki: ";
-                    cin >> length;
+                    std::cout << "Podaj ID skrzynki: ";
+                    std::cin >> boxId;
+                    std::cout << "Podaj wysokosc paczki: ";
+                    std::cin >> height;
+                    std::cout << "Podaj szerokosc paczki: ";
+                    std::cin >> width;
+                    std::cout << "Podaj dlugosc paczki: ";
+                    std::cin >> length;
                     auto package = std::make_shared<Package>("123456789", height, width, length);
                     parcelLocker->InsertPackage(boxId, package);
                 });
@@ -116,18 +114,18 @@ void runParcelLockerProgram() {
             case '5': // 5 - WYJMIJ paczke
                 executeIfParcelLockerExists(parcelLocker, [&]() {
                     int boxId, code;
-                    cout << "Podaj ID skrzynki: ";
-                    cin >> boxId;
-                    cout << "Podaj kod: ";
-                    cin >> code;
+                    std::cout << "Podaj ID skrzynki: ";
+                    std::cin >> boxId;
+                    std::cout << "Podaj kod: ";
+                    std::cin >> code;
                     parcelLocker->RemovePackage(boxId, code);
                 });
                 break;
             case '6': // 6 - WYSLIJ kod do skrzynki e-meilem/SMSem :)
                 executeIfParcelLockerExists(parcelLocker, [&]() {
                     int boxId;
-                    cout << "Podaj ID skrzynki: ";
-                    cin >> boxId;
+                    std::cout << "Podaj ID skrzynki: ";
+                    std::cin >> boxId;
                     parcelLocker->GetCode(boxId);
                 });
                 break;
@@ -135,35 +133,35 @@ void runParcelLockerProgram() {
                 executeIfParcelLockerNotExists(parcelLocker,
                     "Przed uruchomieniem DEMO zniszcz obecny paczkomat. Wybiez opcje numer 2!",
                     [&]() {
-                        cout << "Wersja DEMO paczkomatu!" << endl;
-                        cout << "Tworze paczkomat o ilosci skrzynek: 5-MALE, 4-SREDNIE, 3-DUZE" << endl;
-                        parcelLocker = make_unique<ParcelLocker>(5, 4, 3);
-                        cout << endl << "Dodaje paczke do skrzynki 2 (paczka 8x4x5 - paczka OK):";
+                        std::cout << "Wersja DEMO paczkomatu!" << std::endl;
+                        std::cout << "Tworze paczkomat o ilosci skrzynek: 5-MALE, 4-SREDNIE, 3-DUZE" << std::endl;
+                        parcelLocker = std::make_unique<ParcelLocker>(5, 4, 3);
+                        std::cout << std::endl << "Dodaje paczke do skrzynki 2 (paczka 8x4x5 - paczka OK):";
                         auto package = std::make_shared<Package>("123456789", 8,4,5);
                         parcelLocker->InsertPackage(2,package);
 
-                        cout << endl << "Dodaje paczke do skrzynki 6 (paczka 25x20x5 - paczka za duza):";
+                        std::cout << std::endl << "Dodaje paczke do skrzynki 6 (paczka 25x20x5 - paczka za duza):";
                         package = std::make_shared<Package>("123456789", 25,20,5);
                         parcelLocker->InsertPackage(6,package);
 
-                        cout << endl << "Dodaje paczke do skrzynki 10 (paczka 25x20x5 - paczka OK):";
+                        std::cout << std::endl << "Dodaje paczke do skrzynki 10 (paczka 25x20x5 - paczka OK):";
                         package = std::make_shared<Package>("123456789", 25,20,5);
                         parcelLocker->InsertPackage(10,package);
 
-                        cout << endl << "Dodaje paczke do skrzynki 2 (paczka 9x9x10 - skrzynka zajeta):";
+                        std::cout << std::endl << "Dodaje paczke do skrzynki 2 (paczka 9x9x10 - skrzynka zajeta):";
                         package = std::make_shared<Package>("123456789", 9,9,10);
                         parcelLocker->InsertPackage(2,package);
 
-                        cout << endl << "Dodaje paczke do skrzynki 6 (paczka 9x9x10 - paczka OK):";
+                        std::cout << std::endl << "Dodaje paczke do skrzynki 6 (paczka 9x9x10 - paczka OK):";
                         package = std::make_shared<Package>("123456789", 9,9,10);
                         parcelLocker->InsertPackage(6,package);
                     });
                 break;
             case '0': // 0 - WYJSCIE z programu
-                cout << "\tCzy na pewno chcesz zakonczyc program? [T/N]: ";
-                cin >> confirmChoice;
+                std::cout << "\tCzy na pewno chcesz zakonczyc program? [T/N]: ";
+                std::cin >> confirmChoice;
                 if (confirmChoice == 'T' || confirmChoice == 't') {
-                    cout << "\tDziekuje za korzystanie z programu do obslugi Paczkomatu!" << endl;
+                    std::cout << "\tDziekuje za korzystanie z programu do obslugi Paczkomatu!" << std::endl;
                     endProgram = true;
                     if (parcelLocker) {
                         parcelLocker.reset();
@@ -171,12 +169,12 @@ void runParcelLockerProgram() {
                 }
                 break;
             default:
-                cout << endl
-                     << "\tNieobslugiwana wartosc: [" << menuChoice << "]" << endl;
+                std::cout << std::endl
+                     << "\tNieobslugiwana wartosc: [" << menuChoice << "]" << std::endl;
         }
     } while (!endProgram);
 
-    cout << endl; 
+    std::cout << std::endl; 
     system("pause"); 
 }
 
