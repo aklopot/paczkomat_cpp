@@ -5,8 +5,6 @@
 #include <iostream>
 #include <memory>
 
-using namespace std;
-
 class Locker {
   public:
     enum class Size { SMALL, MEDIUM, LARGE };
@@ -16,8 +14,8 @@ class Locker {
     bool occupied_;
     int code_;
     Size size_;
-    shared_ptr<Package> package_; // Wskaźnik na przechowywaną paczkę
-    string GetSize() const;
+    std::shared_ptr<Package> package_; // Wskaźnik na przechowywaną paczkę
+    std::string GetSize() const;
     
 
   public:

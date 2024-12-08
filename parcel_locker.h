@@ -9,7 +9,7 @@
 
 class ParcelLocker {
   private:
-    vector<unique_ptr<Locker>> boxes_;
+    std::vector<std::unique_ptr<Locker>> boxes_;
     CodeManager codeManager_;
 
   public:
